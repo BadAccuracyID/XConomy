@@ -68,7 +68,7 @@ public class DataCon extends DataBaseINFO {
             return false;
         }
 
-        if (!CacheSemiOnline.createfile()) {
+        if (!CacheSemiOnline.createFile()) {
             return false;
         }
 

@@ -176,7 +176,7 @@ public class Cache {
         if (u != null) {
             mainp = Bukkit.getPlayer(u);
             if (mainp == null && ServerINFO.IsSemiOnlineMode) {
-                UUID subu = CacheSemiOnline.CacheSubUUID_getsubuuid(u.toString());
+                UUID subu = CacheSemiOnline.CacheSubUUID_getSubUUID(u.toString());
                 if (subu != null) {
                     Player subp = Bukkit.getPlayer(subu);
                     if (subp != null) {

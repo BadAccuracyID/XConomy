@@ -30,21 +30,21 @@ import java.io.IOException;
 import java.util.UUID;
 
 public class CacheSemiOnline {
-    public static File cachesubuuid;
-    public static FileConfiguration CacheSubUUID;
+    public static File cacheSubUUIDFile;
+    public static FileConfiguration cacheSubUUIDConfig;
 
-    public static boolean createfile() {
+    public static boolean createFile() {
         if (ServerINFO.IsSemiOnlineMode) {
             File dataFolder = new File(XConomy.getInstance().getDataFolder(), "cache");
             if (!dataFolder.exists() && !dataFolder.mkdirs()) {
                 XConomy.getInstance().logger("文件夹创建异常", null);
                 return false;
             }
-            cachesubuuid = new File(dataFolder, "cache_subuuid.yml");
-            CacheSubUUID = YamlConfiguration.loadConfiguration(cachesubuuid);
-            if (!cachesubuuid.exists()) {
+            cacheSubUUIDFile = new File(dataFolder, "cache_subuuid.yml");
+            cacheSubUUIDConfig = YamlConfiguration.loadConfiguration(cacheSubUUIDFile);
+            if (!cacheSubUUIDFile.exists()) {
                 try {
-                    CacheSubUUID.save(cachesubuuid);
+                    cacheSubUUIDConfig.save(cacheSubUUIDFile);
                 } catch (IOException e) {
                     e.printStackTrace();
                     XConomy.getInstance().logger("缓存文件创建异常", null);
@@ -55,26 +55,25 @@ public class CacheSemiOnline {
         return true;
     }
 
-
     @SuppressWarnings("ConstantConditions")
     public static void CacheSubUUID_checkUser(String mainu, Player pp) {
-        if (CacheSubUUID.contains(mainu)) {
-            if (!CacheSubUUID.get(mainu + ".SubUUID").equals(pp.getUniqueId().toString())) {
+        if (cacheSubUUIDConfig.contains(mainu)) {
+            if (!cacheSubUUIDConfig.get(mainu + ".SubUUID").equals(pp.getUniqueId().toString())) {
                 if (pp.isOnline()) {
                     Bukkit.getScheduler().runTask(XConomy.getInstance(), () ->
                             pp.kickPlayer("[XConomy] The player with the same name exists on the server (Three times)"));
                 }
             }
         } else {
-            CacheSubUUID.createSection(mainu + ".SubUUID");
-            CacheSubUUID.set(mainu + ".SubUUID", pp.getUniqueId().toString());
+            cacheSubUUIDConfig.createSection(mainu + ".SubUUID");
+            cacheSubUUIDConfig.set(mainu + ".SubUUID", pp.getUniqueId().toString());
         }
     }
 
     @SuppressWarnings("ConstantConditions")
-    public static UUID CacheSubUUID_getsubuuid(String name) {
-        if (CacheSubUUID.contains(name)) {
-            return UUID.fromString(CacheSubUUID.getString(name + ".SubUUID"));
+    public static UUID CacheSubUUID_getSubUUID(String name) {
+        if (cacheSubUUIDConfig.contains(name)) {
+            return UUID.fromString(cacheSubUUIDConfig.getString(name + ".SubUUID"));
         } else {
             return null;
         }
@@ -83,7 +82,7 @@ public class CacheSemiOnline {
     public static void save() {
         try {
             if (XConomy.config.getBoolean("Settings.semi-online-mode")) {
-                CacheSubUUID.save(cachesubuuid);
+                cacheSubUUIDConfig.save(cacheSubUUIDFile);
             }
         } catch (IOException exception) {
             exception.printStackTrace();
